@@ -55,14 +55,19 @@ OCEmber.Contributor.reopenClass({
         console.log('grabbing datas');
         this.allContributors.addObjects(
             response.data.map(function(raw){
+                console.log('in response');
                 return OCEmber.Contributor.create(raw);
             })
-        );
+        )
       }
     })
-    return this.allContributors;
-    console.log("this " + allContributors);
+    Ember.run.later(function(){
+      console.log("im returning" + allContributors);
+      return this.allContributors;
+    }, 2000)
+    
   }, 
+
   findOne: function(username){
     var contributor = OCEmber.Contributor.create({
       login: username
@@ -94,6 +99,9 @@ OCEmber.ContributorsRoute = Ember.Route.extend({
   model: function(){
     console.log("i can haz contributors");
     return OCEmber.Contributor.find();
+  },
+  setupController: function(controller, model) {
+     controller.set('content', model);
   }
 });
 

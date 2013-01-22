@@ -15,14 +15,14 @@
 
 <h1>OC Ember Example</h1>
 
-<script type="text/x-handlebars" data-template-name="application">
-  <h1>Ember Committers</h1>
+  <h2>Ember Committers</h2>
+<script type="text/x-handlebars">
   {{outlet}}
 </script>
 
 <script type="text/x-handlebars" data-template-name="contributors">
   <h3>Github contributors</h3>
-    {{#each person in controller}}
+    {{#each person in contributor}}
       <a {{action showContributor person}}> {{person.login}} </a>
     {{/each}}
 </script>
