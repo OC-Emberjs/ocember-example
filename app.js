@@ -1,13 +1,19 @@
-OCEmber = Ember.Application.create({});
+OCEmber = Ember.Application.create({
+  LOG_TRANSITIONS: true
+});
 
 OCEmber.ApplicationView = Ember.View.extend({
-  templateName: 'application'
+  template: '<div class="application-content">{{outlet}}</div>'
 });
 OCEmber.ApplicationController = Ember.Controller.extend();
 
-OCEmber.ContributorsController = Ember.ArrayController.extend();
+OCEmber.ContributorsController = Ember.ArrayController.extend({
+  content: null,
+  moreStuff: "Yay Controller"
+});
 OCEmber.ContributorsView = Ember.View.extend({
-  templateName: 'contributors'
+  stuff: 'Hello Stuff',
+  template: Ember.Handlebars.compile("<h2>{{moreStuff}}</h2><br /><h3>Github contributors</h3> {{#each person in controller.content}} <a {{action showContributor person}}> {{person.login}} </a> {{/each}}")
 });
 
 // OCEmber.ContributorView = Ember.View.extend({
@@ -47,25 +53,25 @@ OCEmber.Contributor = Ember.Object.extend({
 OCEmber.Contributor.reopenClass({
   allContributors: [],
   find: function(){
+    var that = this;
     $.ajax({
       url: 'https://api.github.com/repos/emberjs/ember.js/contributors',
       dataType: 'jsonp',
       context: this,
       success: function(response){
-        console.log('grabbing datas');
+        console.log('returned datas' + JSON.stringify(response.data));
         this.allContributors.addObjects(
             response.data.map(function(raw){
-                console.log('in response');
+                // console.log('in response');
                 return OCEmber.Contributor.create(raw);
             })
         )
       }
     })
-    Ember.run.later(function(){
-      console.log("im returning" + allContributors);
-      return this.allContributors;
-    }, 2000)
-    
+//    Ember.run.later(function(){
+//      return that.allContributors;
+//    }, 2000)
+    return that.allContributors;
   }, 
 
   findOne: function(username){
@@ -102,6 +108,11 @@ OCEmber.ContributorsRoute = Ember.Route.extend({
   },
   setupController: function(controller, model) {
      controller.set('content', model);
+  },
+  renderTemplate: function(){
+    this.render('contributors', {
+      into: 'application'
+    });
   }
 });
 
@@ -162,4 +173,4 @@ OCEmber.ContributorsRoute = Ember.Route.extend({
 //     })
 // });
 
-OCEmber.initialize();
+//OCEmber.initialize();

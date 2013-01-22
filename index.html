@@ -15,17 +15,7 @@
 
 <h1>OC Ember Example</h1>
 
-  <h2>Ember Committers</h2>
-<script type="text/x-handlebars">
-  {{outlet}}
-</script>
-
-<script type="text/x-handlebars" data-template-name="contributors">
-  <h3>Github contributors</h3>
-    {{#each person in contributor}}
-      <a {{action showContributor person}}> {{person.login}} </a>
-    {{/each}}
-</script>
+<h2>Ember Committers</h2>
 
 <script type="text/x-handlebars" data-template-name="contributor">
 <h4>Individual contributor</h4>
